@@ -2,7 +2,7 @@
 # FROM 表示设置要制作的镜像基于哪个镜像，FROM指令必须是整个Dockerfile的第一个指令，如果指定的镜像不存在默认会自动从Docker Hub上下载。
 # 指定我们的基础镜像是node，latest表示版本是最新, 如果要求空间极致，可以选择lts-alpine
 # 使用 as 来为某一阶段命名
-FROM node:20-slim AS base
+FROM node:16.20.2 AS base
 
 ARG PROJECT_DIR
 
