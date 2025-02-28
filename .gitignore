@@ -75,3 +75,4 @@ __data
 
 public/upload
 types/env.d.ts
+*.tar
