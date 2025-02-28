@@ -10,11 +10,14 @@
     "paths": {
       "~/*": ["src/*"]
     },
+    "checkJs": false,
+    "strict": false,
     "strictBindCallApply": false,
     "strictNullChecks": false,
     "noFallthroughCasesInSwitch": false,
     "noImplicitAny": false,
     "declaration": true,
+    "noEmitOnError": false,
     "outDir": "./dist",
     "removeComments": true,
     "sourceMap": true,
