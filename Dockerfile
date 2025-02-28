@@ -13,7 +13,9 @@ ENV DB_HOST=mysql \
 
 
 RUN npm install -g pnpm@9.1.0 \
-    && yarn global add pm2
+    && yarn global add pm2 \
+    && npm install -g cross-env \
+    && npm install mysql2
 
 # WORKDIR指令用于设置Dockerfile中的RUN、CMD和ENTRYPOINT指令执行命令的工作目录(默认为/目录)，该指令在Dockerfile文件中可以出现多次，
 # 如果使用相对路径则为相对于WORKDIR上一次的值，
@@ -51,4 +53,4 @@ EXPOSE $APP_PORT
 # 容器启动时执行的命令，类似npm run start
 # CMD ["pnpm", "start:prod"]
 # CMD ["pm2-runtime", "ecosystem.config.js"]
-ENTRYPOINT ./wait-for-it.sh $DB_HOST:3306 -- pnpm migration:run && pm2-runtime ecosystem.config.js
+ENTRYPOINT ./wait-for-it.sh $DB_HOST:3306 -- node db.sync.js
