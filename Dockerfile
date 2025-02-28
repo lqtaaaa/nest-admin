@@ -2,7 +2,7 @@
 # FROM 表示设置要制作的镜像基于哪个镜像，FROM指令必须是整个Dockerfile的第一个指令，如果指定的镜像不存在默认会自动从Docker Hub上下载。
 # 指定我们的基础镜像是node，latest表示版本是最新, 如果要求空间极致，可以选择lts-alpine
 # 使用 as 来为某一阶段命名
-FROM node:18-alpine AS base
+FROM node:18 AS base
 
 ARG PROJECT_DIR
 
@@ -13,8 +13,7 @@ ENV DB_HOST=mysql \
 
 
 RUN npm install -g pnpm@9.1.0 \
-    && yarn global add pm2 \
-    && apk add --no-cache build-base bash
+    && yarn global add pm2
 
 # WORKDIR指令用于设置Dockerfile中的RUN、CMD和ENTRYPOINT指令执行命令的工作目录(默认为/目录)，该指令在Dockerfile文件中可以出现多次，
 # 如果使用相对路径则为相对于WORKDIR上一次的值，
@@ -25,8 +24,7 @@ COPY ./ $PROJECT_DIR
 RUN chmod +x ./wait-for-it.sh 
 
 # set timezone
-RUN apk add --no-cache tzdata \
-    && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
     && echo 'Asia/Shanghai' > /etc/timezone
 
 # see https://pnpm.io/docker
