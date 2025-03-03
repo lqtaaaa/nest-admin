@@ -1,8 +1,48 @@
 version: '3'
 
 services:
+  mysql:
+    image: mysql:latest
+    container_name: nest-admin-mysql
+    restart: always
+    env_file:
+      - .env
+      - .env.production
+    environment:
+      - MYSQL_HOST=${DB_HOST}
+      - MYSQL_PORT=${DB_PORT}
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_USERNAME=${DB_USERNAME}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+    ports:
+      - '0.0.0.0:13306:3306'
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci
+    volumes:
+      - ./__data/mysql/:/var/lib/mysql/
+      - ./deploy/sql/:/docker-entrypoint-initdb.d/
+    networks:
+      - nest_admin_net
+
+  redis:
+    image: redis:alpine
+    container_name: nest-admin-redis
+    restart: always
+    env_file:
+      - .env
+      - .env.production
+    ports:
+      - '0.0.0.0:${REDIS_PORT}:6379'
+    command: >
+      --requirepass ${REDIS_PASSWORD}
+    networks:
+      - nest_admin_net
+
   nest-admin-server:
-    image: buqiyuan/nest-admin-server:stable
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        PROJECT_DIR: /nest-admin
     container_name: nest-admin-server
     pull_policy: always
     restart: always
